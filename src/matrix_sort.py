@@ -1,6 +1,6 @@
 import numpy as np
 
-PRECISION = 3  # количество знаков после запятой при выводе
+PRECISION = 4  # количество знаков после запятой при выводе
 
 def input_size(prompt):
     while True:
