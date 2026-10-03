@@ -1,0 +1,20 @@
+# Временные файлы
+*.tmp
+*.log
+
+# Каталоги сборки
+build/
+dist/
+*.egg-info/
+
+# Файлы окружения
+.env
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Кэш тестов и редакторов
+.pytest_cache/
+.idea/
+.vscode/
