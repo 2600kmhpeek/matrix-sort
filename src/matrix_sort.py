@@ -20,7 +20,7 @@ def input_matrix(m, n):
         parts = input(f"Строка {len(rows) + 1}: ").split()
         try:
             row = list(map(float, parts))
-            if len(row) != n:
+            if len(row) != n or not np.all(np.isfinite(row)):
                 raise ValueError
             rows.append(row)
         except ValueError:
