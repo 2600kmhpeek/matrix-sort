@@ -72,3 +72,8 @@ def test_input_matrix_rejects_wrong_count():
 def test_format_matrix_uses_three_decimals():
     text = format_matrix(np.array([[1.0, 2.5]]))
     assert "1.000" in text and "2.500" in text
+
+
+def test_input_matrix_rejects_nan_and_inf():
+    with patch("builtins.input", side_effect=["nan 1", "inf 2", "3 4"]):
+        assert input_matrix(1, 2).tolist() == [[3, 4]]
