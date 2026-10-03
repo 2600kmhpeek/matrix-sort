@@ -2,6 +2,7 @@ import numpy as np
 
 PRECISION = 3  # количество знаков после запятой при выводе
 
+
 def input_size(prompt):
     while True:
         try:
