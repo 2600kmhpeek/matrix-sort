@@ -2,7 +2,8 @@ from unittest.mock import patch
 
 import numpy as np
 
-from src.matrix_sort import input_matrix, input_size, sort_desc
+from src.matrix_sort import (format_matrix, input_matrix, input_size,
+                             sort_desc)
 
 
 def test_basic_matrix():
@@ -66,3 +67,8 @@ def test_input_matrix_rejects_letters():
 def test_input_matrix_rejects_wrong_count():
     with patch("builtins.input", side_effect=["1 2", "1 2 3"]):
         assert input_matrix(1, 3).tolist() == [[1, 2, 3]]
+
+
+def test_format_matrix_uses_three_decimals():
+    text = format_matrix(np.array([[1.0, 2.5]]))
+    assert "1.000" in text and "2.500" in text
