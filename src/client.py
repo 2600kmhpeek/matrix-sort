@@ -4,7 +4,7 @@ import requests
 
 from src.service import API_VERSION
 
-DEFAULT_URL = "http://127.0.0.1:5000"
+DEFAULT_URL = "http://127.0.0.1:5050"
 
 
 class IntegrationError(Exception):
