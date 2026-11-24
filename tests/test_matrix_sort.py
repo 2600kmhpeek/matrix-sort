@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 import numpy as np
+import pytest
 
 from src.matrix_sort import (format_matrix, input_matrix, input_size,
                              sort_desc)
@@ -49,9 +50,31 @@ def test_larger_random_matrix():
     assert result.shape == (5, 5)
 
 
+@pytest.mark.parametrize("shape", [(1, 1), (1, 5), (5, 1), (2, 3), (10, 10)])
+def test_sort_preserves_shape_and_count(shape):
+    matrix = np.arange(shape[0] * shape[1], dtype=float).reshape(shape)
+    flat, result = sort_desc(matrix)
+    assert flat.size == matrix.size
+    assert result.shape == shape
+    assert sorted(flat.tolist()) == sorted(matrix.flatten().tolist())
+
+
+def test_boundary_max_size_100x100():
+    matrix = np.arange(10000, dtype=float).reshape(100, 100)
+    flat, result = sort_desc(matrix)
+    assert flat[0] == 9999 and flat[-1] == 0
+    assert result.shape == (100, 100)
+
+
 def test_input_size_repeats_until_valid():
     with patch("builtins.input", side_effect=["abc", "0", "-2", "4"]):
         assert input_size("n: ") == 4
+
+
+@pytest.mark.parametrize("value", ["1", "100"])
+def test_input_size_accepts_positive(value):
+    with patch("builtins.input", side_effect=[value]):
+        assert input_size("n: ") == int(value)
 
 
 def test_input_matrix_valid():
@@ -72,6 +95,11 @@ def test_input_matrix_rejects_wrong_count():
 def test_format_matrix_uses_three_decimals():
     text = format_matrix(np.array([[1.0, 2.5]]))
     assert "1.000" in text and "2.500" in text
+
+
+def test_format_matrix_negative_and_zero():
+    text = format_matrix(np.array([[0.0, -1.25]]))
+    assert "0.000" in text and "-1.250" in text
 
 
 def test_input_matrix_rejects_nan_and_inf():

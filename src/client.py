@@ -4,7 +4,7 @@ import requests
 
 from src.service import API_VERSION
 
-DEFAULT_URL = "http://localhost:8000"
+DEFAULT_URL = "http://127.0.0.1:5000"
 
 
 class IntegrationError(Exception):
@@ -55,10 +55,17 @@ def _parse_response(resp):
         body = resp.json()
     except ValueError:
         raise IntegrationError("Сервис вернул не JSON") from None
+    if not isinstance(body, dict):
+        raise IntegrationError("Сервис вернул JSON неверной структуры")
     if resp.status_code == 400:
         raise InvalidDataError(body.get("message", "Некорректные данные"))
     if resp.status_code == 409:
         raise VersionConflictError(body.get("message", "Конфликт версий"))
     if resp.status_code != 200 or body.get("status") != "ok":
         raise IntegrationError(f"Неожиданный ответ сервиса: HTTP {resp.status_code}")
-    return np.array(body["sorted_flat"]), np.array(body["sorted_matrix"])
+    try:
+        flat = body["sorted_flat"]
+        sorted_matrix = body["sorted_matrix"]
+    except KeyError as exc:
+        raise IntegrationError("В ответе сервиса отсутствуют обязательные поля") from exc
+    return np.array(flat), np.array(sorted_matrix)
