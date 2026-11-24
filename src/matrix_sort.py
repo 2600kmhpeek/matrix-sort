@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 
 PRECISION = 3  # количество знаков после запятой при выводе
@@ -37,7 +39,7 @@ def sort_desc(matrix):
 
 def format_matrix(matrix):
     return np.array2string(matrix, precision=PRECISION, suppress_small=True,
-                           floatmode="fixed")
+                           floatmode="fixed", threshold=sys.maxsize)
 
 
 def main():
